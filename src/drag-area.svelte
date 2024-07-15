@@ -43,18 +43,18 @@
 
     
     const nodes = writable<Node[]>([
-       {
-        id: '1',
-        type: 'lampu_node',
-        data: {},
-        position: { x: -100, y: -50 }
-       },
-       {
-        id: '2',
-        type: 'saklar_node',
-        data: {text: "Off"},
-        position: { x: -400, y: -50 }
-       },
+    //    {
+    //     id: '1',
+    //     type: 'lampu_node',
+    //     data: {},
+    //     position: { x: -100, y: -50 }
+    //    },
+    //    {
+    //     id: '2',
+    //     type: 'saklar_node',
+    //     data: {text: "Off"},
+    //     position: { x: -400, y: -50 }
+    //    },
     ]);
     
     const edges = writable<Edge[]>([]);
@@ -69,8 +69,8 @@
         }
     };
 
-    let saklarCounter = 0;
-    let lampuCounter = 0; 
+    let saklarCounter = 1;
+    let lampuCounter = 1; 
 
     const onDrop = (event: DragEvent) => {
         event.preventDefault();
@@ -91,7 +91,7 @@
             position,
             data: {
                 label: `${type} node`,
-                ...(type === 'saklar_node' && { nama_saklar: String.fromCharCode(65 + saklarCounter++) }),
+                ...(type === 'saklar_node' && { nama_saklar: saklarCounter++ }),
                 ...(type === 'lampu_node' && { nama_lampu: `Lampu_${++lampuCounter}` })
             },
             origin: [0.5, 0.0]

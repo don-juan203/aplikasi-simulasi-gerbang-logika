@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Handle, Position, type NodeProps, useSvelteFlow } from '@xyflow/svelte';
+  import { text } from '@sveltejs/kit';
+import { Handle, Position, type NodeProps, useSvelteFlow } from '@xyflow/svelte';
 
   type $$Props = NodeProps;
 
@@ -12,12 +13,12 @@
 </script>
 
 <div class="custom">
-  <div class="label">Listrik: {data.text}</div>
+  <div class="label">Saklar {data.nama_saklar}: { data.text }</div>
   <div>
     {#if data.text === "Off"}
-      <button on:click={() => updateNodeData(id, { text: "On"})}>On</button>
+      <button on:click={() => updateNodeData(id, { text: "On"})}>Switch</button>
     {:else if data.text === "On"}
-      <button on:click={() => updateNodeData(id, { text: "Off"})}>Off</button>
+      <button on:click={() => updateNodeData(id, { text: "Off"})}>Switch</button>
     {/if}
   </div>
   <Handle type="source" position={Position.Right} />

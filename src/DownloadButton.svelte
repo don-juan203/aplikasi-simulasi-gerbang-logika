@@ -1,5 +1,13 @@
 <script lang="ts">
   import { toPng } from 'html-to-image';
+  import Carousel from 'svelte-carousel';
+  import img1 from '$lib/assets/1.gif';
+  import img2 from '$lib/assets/2.gif';
+  import img3 from '$lib/assets/3.gif';
+  import img4 from '$lib/assets/4.gif';
+  import img5 from '$lib/assets/5.gif';
+  import img6 from '$lib/assets/6.gif';
+  import img7 from '$lib/assets/7.gif'
   import { writable } from 'svelte/store';
   import { Panel, getNodesBounds, getViewportForBounds, useEdges, useNodes, useConnection, useSvelteFlow } from '@xyflow/svelte';
 
@@ -26,7 +34,7 @@
 
     if (viewport) {
       toPng(viewportDomNode, {
-        backgroundColor: '#1a365d',
+        backgroundColor: '#ffffff',
         width: imageWidth,
         height: imageHeight,
         style: {
@@ -47,6 +55,8 @@
   let filename = writable('');
   let showTruthTableModal = writable(false);
   let truthTable = writable([]);
+  let showHelpModal = writable(false);
+
 
   function download_file(name: string) {
     let projectData = toObject();
@@ -205,6 +215,14 @@
       });
     }
   }
+
+  function openHelpModal() {
+    showHelpModal.set(true);
+  }
+
+  function closeHelpModal() {
+    showHelpModal.set(false);
+  }
 </script>
 
 <!-- Panel section -->
@@ -221,7 +239,7 @@
         <li><button class="nav-button" on:click={openModal}>Simpan</button></li>
         <li><button class="nav-button" on:click={showTruthTable}>Tabel Kebenaran</button></li>
         <li><button class="nav-button" on:click={downloadImage}>Cetak Gambar</button></li>
-        <!-- <li><button class="nav-button">Simpan Sebagai IC</button></li> -->
+        <li><button class="nav-button" on:click={openHelpModal}>Bantuan</button></li>
       </ul>
     </div>
   </div>
@@ -258,10 +276,10 @@
         <thead>
           <tr>
             {#each Array($truthTable[0]?.inputs.length || 0) as _, i}
-              <th>Input {i + 1}</th>
+              <th>Saklar {i + 1}</th>
             {/each}
             {#each Array($truthTable[0]?.outputs.length || 0) as _, i}
-              <th>Output {i + 1}</th>
+              <th>Lampu {i + 1}</th>
             {/each}
           </tr>
         </thead>
@@ -279,6 +297,42 @@
         </tbody>
       </table>
       <button class="modal-button" on:click={downloadTruthTableImage}>Unduh sebagai Gambar</button>
+    </div>
+  </div>
+{/if}
+
+{#if $showHelpModal}
+  <div class="modal">
+    <div class="modal-content extra-large-modal">
+      <span class="close" on:click={closeHelpModal}>&times;</span>
+      <h2>Bantuan</h2>
+      <Carousel
+		>
+    <div class="carousel-content">
+      <img src={img1} alt="1">
+      <p>Tekan dan tahan komponen untuk menambahkannya ke dalam rangkaian</p>
+    </div>
+    <div class="carousel-content">
+      <img src={img2} alt="2">
+      <p></p>
+    </div>
+    <div class="carousel-content">
+      <img src={img3} alt="3">
+    </div>
+    <div class="carousel-content">
+      <img src={img4} alt="4">
+    </div>
+    <div class="carousel-content">
+      <img src={img5} alt="5">
+    </div>
+    <div class="carousel-content">
+      <img src={img6} alt="6">
+    </div>
+    <div class="carousel-content">
+      <img src={img7} alt="7">
+    </div>
+    </Carousel>
+      <button class="modal-button" on:click={closeHelpModal}>Tutup</button>
     </div>
   </div>
 {/if}
@@ -388,12 +442,24 @@
     max-width: 100%;
   }
 
+  .carousel-content {
+    text-align: center;
+  }
+
+  .carousel-content img {
+    width: 100%;
+  }
+
   .small-modal {
     width: 300px;
   }
 
   .large-modal {
     width: 600px;
+  }
+
+  .extra-large-modal {
+    width: 800px;
   }
 
   .close {
