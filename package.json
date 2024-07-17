@@ -36,6 +36,7 @@
 	"type": "module",
 	"dependencies": {
 		"@xyflow/svelte": "^0.1.8",
+		"gh-pages": "^6.1.1",
 		"html-to-image": "^1.11.11"
 	}
 }
