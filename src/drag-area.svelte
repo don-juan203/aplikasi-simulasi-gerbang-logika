@@ -92,7 +92,7 @@
             data: {
                 label: `${type} node`,
                 ...(type === 'saklar_node' && { nama_saklar: saklarCounter++ }),
-                ...(type === 'lampu_node' && { nama_lampu: `Lampu_${++lampuCounter}` })
+                ...(type === 'lampu_node' && { nama_lampu: lampuCounter++ })
             },
             origin: [0.5, 0.0]
         } satisfies Node;

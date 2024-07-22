@@ -310,26 +310,31 @@
 		>
     <div class="carousel-content">
       <img src={img1} alt="1">
-      <p>Tekan dan tahan komponen untuk menambahkannya ke dalam rangkaian</p>
+      <p>Tekan dan tahan komponen untuk menambahkannya ke dalam rangkaian. Tekan komponen yang sudah ada dan tekan "Delete" pada keyboard untuk menghapus</p>
     </div>
     <div class="carousel-content">
       <img src={img2} alt="2">
-      <p></p>
+      <p>Tekan dan tahan handle pada komponen untuk menyambungkannya dengan komponen lain. Tekan sambungan yang sudah ada dan tekan "Delete" pada keyboard untuk menghapus</p>
     </div>
     <div class="carousel-content">
       <img src={img3} alt="3">
+      <p>Tekan tombol "Cetak Gambar" untuk mencetak rangkaian sebagai gambar</p>
     </div>
     <div class="carousel-content">
       <img src={img4} alt="4">
+      <p>Tekan tombol "Tabel Kebenaran" untuk menampilkan tabel kebenaran dari rangkaian yang ada. Tabel dapat disimpan sebagai gambar dengan menekan "Simpan sebagai Gambar"</p>
     </div>
     <div class="carousel-content">
       <img src={img5} alt="5">
+      <p>Simpan proyek dalam bentuk file dengan menekan tombol "Simpan". File akan disimpan dengan format .lgproj</p>
     </div>
     <div class="carousel-content">
       <img src={img6} alt="6">
+      <p>Pilih proyek yang sudah ada dengan menekan tombol "Pilih".</p>
     </div>
     <div class="carousel-content">
       <img src={img7} alt="7">
+      <p>Mulai proyek baru dengan menekan tombol "Baru"</p>
     </div>
     </Carousel>
       <button class="modal-button" on:click={closeHelpModal}>Tutup</button>
