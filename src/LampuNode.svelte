@@ -11,6 +11,7 @@
     type $$Props = NodeProps;
   
     export let id: $$Props['id'];
+    export let data: $$Props['data'];
   
     const connections = useHandleConnections({
       nodeId: id,
@@ -30,7 +31,7 @@
   
   <div class="custom">
     <Handle type="target" position={Position.Left} {isConnectable}/>
-    <div class="label">Kondisi Lampu:</div>
+    <div class="label">Lampu {data.nama_lampu}: </div>
     <!-- <button on:click={tampil}></button> -->
     {#if $nodesData == undefined}
       <div>Off</div>

@@ -3,6 +3,14 @@
   import DragArea from "../drag-area.svelte";
   import { SvelteFlowProvider } from '@xyflow/svelte';
 
+  import and from '$lib/assets/and_inv.png';
+  import or from '$lib/assets/or_inv.png';
+  import not from '$lib/assets/not_inv.png';
+  import nand from '$lib/assets/nand_inv.png';
+  import nor from '$lib/assets/nor_inv.png';
+  import xor from '$lib/assets/xor_inv.png';
+  import xnor from '$lib/assets/xnor_inv.png';
+
   // drag and drop
   const onDragStart = (event: DragEvent, nodeType: string) => {
     if (!event.dataTransfer) {
@@ -16,6 +24,7 @@
   let Input_isExpanded = true;
   let Output_isExpanded = true;
   let Gerbang_isExpanded = true;
+  let Teks_isExpanded = true;
   let Ic_isExpanded = true;
 
   function InputMenuclickHandler() {
@@ -26,6 +35,9 @@
   }
   function GerbangMenuclickHandler() {
     Gerbang_isExpanded = !Gerbang_isExpanded;
+  }
+  function TeksMenuclickHandler() {
+    Teks_isExpanded = !Teks_isExpanded;
   }
   function IcMenuclickHandler() {
     Ic_isExpanded = !Ic_isExpanded;
@@ -56,29 +68,53 @@
       {#if Gerbang_isExpanded}
       <ul transition:slide>
         <li>
-          <div class="input-node node" on:dragstart={(event) => onDragStart(event, 'and_node')} draggable={true}>AND</div>
+          <div class="input-node node" on:dragstart={(event) => onDragStart(event, 'and_node')} draggable={true}>
+            <img src="{and}" alt="and">
+          </div>
         </li>
         <li>
-          <div class="input-node node" on:dragstart={(event) => onDragStart(event, 'or_node')} draggable={true}>OR</div>
+          <div class="input-node node" on:dragstart={(event) => onDragStart(event, 'or_node')} draggable={true}>
+            <img src="{or}" alt="or">
+          </div>
         </li>
         <li>
-          <div class="input-node node" on:dragstart={(event) => onDragStart(event, 'not_node')} draggable={true}>NOT</div>
+          <div class="input-node node" on:dragstart={(event) => onDragStart(event, 'not_node')} draggable={true}>
+            <img src="{not}" alt="not">
+          </div>
         </li>
         <li>
-          <div class="input-node node" on:dragstart={(event) => onDragStart(event, 'nand_node')} draggable={true}>NAND</div>
+          <div class="input-node node" on:dragstart={(event) => onDragStart(event, 'nand_node')} draggable={true}>
+            <img src="{nand}" alt="nand">
+          </div>
         </li>
         <li>
-          <div class="input-node node" on:dragstart={(event) => onDragStart(event, 'nor_node')} draggable={true}>NOR</div>
+          <div class="input-node node" on:dragstart={(event) => onDragStart(event, 'nor_node')} draggable={true}>
+            <img src="{nor}" alt="nor">
+          </div>
         </li>
         <li>
-          <div class="input-node node" on:dragstart={(event) => onDragStart(event, 'xor_node')} draggable={true}>XOR</div>
+          <div class="input-node node" on:dragstart={(event) => onDragStart(event, 'xor_node')} draggable={true}>
+            <img src="{xor}" alt="xor">
+          </div>
         </li>
         <li>
-          <div class="input-node node" on:dragstart={(event) => onDragStart(event, 'xnor_node')} draggable={true}>XNOR</div>
+          <div class="input-node node" on:dragstart={(event) => onDragStart(event, 'xnor_node')} draggable={true}>
+            <img src="{xnor}" alt="xnor">
+          </div>
         </li>
       </ul>
       {/if}
+      <button class="menu-section-button" on:click={TeksMenuclickHandler}>Teks</button>
+      {#if Teks_isExpanded}
+      <ul transition:slide>
+        <li>
+          <div class="input-node node" on:dragstart={(event) => onDragStart(event, 'teks_node')} draggable={true}>Teks</div>
+        </li>
+      </ul>
+      {/if}
+      <div class="empty" style=""></div>
     </div>
+
   </div>
   <SvelteFlowProvider>
     <DragArea />
@@ -91,6 +127,10 @@
     line-height: 1.5;
     font-weight: 400;
     margin-left: 15vw;
+  }
+  img {
+    margin: auto;
+    height: 3vw;
   }
   ul {
     list-style-type: none;
@@ -105,8 +145,6 @@
     z-index: 9;
     background-color: #2c3e50;
     color: #ecf0f1;
-    /* border-right: 1px solid #bdc3c7; */
-    /* box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); */
   }
   .empty {
     height: 5vh;
@@ -114,10 +152,11 @@
     text-align: center;
     font-size: large;
     font-weight: bold;
-    /* border-bottom: 1px solid black; */
   }
   .real-menu {
     padding: 1rem;
+    height: 100vh;
+    overflow: scroll;
   }
   .menu-section-button {
     width: 100%;
@@ -143,6 +182,13 @@
     border-radius: 4px;
     transition: background-color 0.3s;
   }
+
+  .input-node {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .node:hover {
     background-color: #3b5998;
   }

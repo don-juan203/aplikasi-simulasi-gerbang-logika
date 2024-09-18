@@ -133,41 +133,40 @@
     const nodes = jsonData.nodes;
     const edges = jsonData.edges;
 
-    function getNodeInputs(nodeId: string): NodeData[] {
-      return edges
-        .filter(edge => edge.target === nodeId)
-        .map(edge => nodes.find(node => node.id === edge.source)!);
+    function getNodeInputs(nodeId) {
+        return edges.filter(edge => edge.target === nodeId)
+                    .map(edge => nodes.find(node => node.id === edge.source)!);
     }
 
-    function evaluateNode(node: NodeData): number {
-      if (node.type === 'saklar_node') {
-        return node.data.text === 'On' ? 1 : 0;
-      } else if (node.type === 'and_node') {
-        const inputs = getNodeInputs(node.id).map(inputNode => evaluateNode(inputNode));
-        return inputs.every(input => input === 1) ? 1 : 0;
-      } else if (node.type === 'or_node') {
-        const inputs = getNodeInputs(node.id).map(inputNode => evaluateNode(inputNode));
-        return inputs.some(input => input === 1) ? 1 : 0;
-      } else if (node.type === 'not_node') {
-        const inputs = getNodeInputs(node.id).map(inputNode => evaluateNode(inputNode));
-        return inputs[0] === 1 ? 0 : 1;
-      } else if (node.type === 'nand_node') {
-        const inputs = getNodeInputs(node.id).map(inputNode => evaluateNode(inputNode));
-        return inputs.every(input => input === 1) ? 0 : 1;
-      } else if (node.type === 'nor_node') {
-        const inputs = getNodeInputs(node.id).map(inputNode => evaluateNode(inputNode));
-        return inputs.some(input => input === 1) ? 0 : 1;
-      } else if (node.type === 'xor_node') {
-        const inputs = getNodeInputs(node.id).map(inputNode => evaluateNode(inputNode));
-        return inputs.reduce((acc, input) => acc ^ input, 0);
-      } else if (node.type === 'xnor_node') {
-        const inputs = getNodeInputs(node.id).map(inputNode => evaluateNode(inputNode));
-        return inputs.reduce((acc, input) => acc ^ input, 0) === 1 ? 0 : 1;
-      } else if (node.type === 'lampu_node') {
-        const inputs = getNodeInputs(node.id).map(inputNode => evaluateNode(inputNode));
-        return inputs[0];
-      }
-      return 0;
+    function evaluateNode(node) {
+        if (node.type === 'saklar_node') {
+            return node.data.text === 'On' ? 1 : 0;
+        } else if (node.type === 'and_node') {
+            const inputs = getNodeInputs(node.id).map(inputNode => evaluateNode(inputNode));
+            return inputs.every(input => input === 1) ? 1 : 0;
+        } else if (node.type === 'or_node') {
+            const inputs = getNodeInputs(node.id).map(inputNode => evaluateNode(inputNode));
+            return inputs.some(input => input === 1) ? 1 : 0;
+        } else if (node.type === 'not_node') {
+            const inputs = getNodeInputs(node.id).map(inputNode => evaluateNode(inputNode));
+            return inputs[0] === 1 ? 0 : 1;
+        } else if (node.type === 'nand_node') {
+            const inputs = getNodeInputs(node.id).map(inputNode => evaluateNode(inputNode));
+            return inputs.every(input => input === 1) ? 0 : 1;
+        } else if (node.type === 'nor_node') {
+            const inputs = getNodeInputs(node.id).map(inputNode => evaluateNode(inputNode));
+            return inputs.some(input => input === 1) ? 0 : 1;
+        } else if (node.type === 'xor_node') {
+            const inputs = getNodeInputs(node.id).map(inputNode => evaluateNode(inputNode));
+            return inputs.reduce((acc, input) => acc ^ input, 0);
+        } else if (node.type === 'xnor_node') {
+            const inputs = getNodeInputs(node.id).map(inputNode => evaluateNode(inputNode));
+            return inputs.reduce((acc, input) => acc ^ input, 0) === 1 ? 0 : 1;
+        } else if (node.type === 'lampu_node') {
+            const inputs = getNodeInputs(node.id).map(inputNode => evaluateNode(inputNode));
+            return inputs[0];
+        }
+        return 0;
     }
 
     const truthTable = [];
@@ -178,25 +177,28 @@
     const numCombinations = 1 << numInputs;
 
     for (let i = 0; i < numCombinations; i++) {
-      const inputs = [];
-      for (let j = 0; j < numInputs; j++) {
-        inputs.push((i >> j) & 1);
-      }
+        const inputs = [];
+        for (let j = 0; j < numInputs; j++) {
+            inputs.push((i >> j) & 1);
+        }
 
-      inputNodes.forEach((node, index) => {
-        node.data.text = inputs[index] ? 'On' : 'Off';
-      });
+        inputNodes.forEach((node, index) => {
+            node.data.text = inputs[index] ? 'On' : 'Off';
+        });
 
-      const outputs = outputNodes.map(lampNode => evaluateNode(lampNode));
+        const outputs = outputNodes.map(lampNode => evaluateNode(lampNode));
 
-      truthTable.push({
-        inputs,
-        outputs
-      });
+        truthTable.push({
+            inputs,
+            outputs,
+            inputNames: inputNodes.map(node => node.data.nama_saklar),
+            outputNames: outputNodes.map(node => node.data.nama_lampu)
+        });
     }
 
     return truthTable;
-  }
+}
+
 
   function showTruthTable() {
     const table = generateTruthTable();
@@ -275,11 +277,11 @@
       <table class="truth-table">
         <thead>
           <tr>
-            {#each Array($truthTable[0]?.inputs.length || 0) as _, i}
-              <th>Saklar {i + 1}</th>
+            {#each $truthTable[0]?.inputNames as nama_saklar}
+              <th>Saklar {nama_saklar}</th>
             {/each}
-            {#each Array($truthTable[0]?.outputs.length || 0) as _, i}
-              <th>Lampu {i + 1}</th>
+            {#each $truthTable[0]?.outputNames as nama_lampu}
+              <th>Lampu {nama_lampu}</th>
             {/each}
           </tr>
         </thead>
@@ -300,6 +302,7 @@
     </div>
   </div>
 {/if}
+
 
 {#if $showHelpModal}
   <div class="modal">

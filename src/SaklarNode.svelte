@@ -29,10 +29,15 @@ import { Handle, Position, type NodeProps, useSvelteFlow } from '@xyflow/svelte'
     background-color: #eee;
     padding: 10px;
     border-radius: 10px;
+    font-size: 11px;
   }
 
   .label {
     font-size: 12px;
     margin-bottom: 5px;
+  }
+
+  button {
+    font-size: 11px;
   }
 </style>

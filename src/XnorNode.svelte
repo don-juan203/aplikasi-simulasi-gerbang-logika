@@ -7,6 +7,7 @@
       useSvelteFlow,
       type NodeProps
     } from '@xyflow/svelte';
+    import img from '$lib/assets/xnor.png';
   
     type $$Props = NodeProps;
   
@@ -52,7 +53,8 @@
   </script>
   
   <div class="custom">
-    <div class="label" style="margin-top: auto; margin-bottom: auto;">XNOR</div>
+    <!-- <div class="label" style="margin-top: auto; margin-bottom: auto;">XNOR</div> -->
+    <img class="node-img" src="{img}" alt="XNOR">
     <Handle
       type="target"
       position={Position.Left}
@@ -68,14 +70,23 @@
   
   <style>
     .custom {
-      background-color: #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* background-color: #eee; */
       padding: 10px;
       border-radius: 10px;
       font-size: 12px;
+      width: 40px;
+      height: 20px;
     }
   
-    .label {
-      margin-bottom: 5px;
+    .node-img {
+      width: 100%;
+      max-width: 40px;
+      height: auto;
+      display: block;
+      /* border: 2px solid black; */
     }
   </style>
   

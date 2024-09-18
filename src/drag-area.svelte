@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import DownloadButton from './DownloadButton.svelte';
     import { 
@@ -24,12 +25,13 @@
     import NorNode from './NorNode.svelte';
     import XorNode from './XorNode.svelte';
     import XnorNode from './XnorNode.svelte';
+    import TextNode from './TextNode.svelte';
+    import ContextMenu from './ContextMenu.svelte';
 
     // real
     import '@xyflow/svelte/dist/style.css';
 
     const nodeTypes: NodeTypes = {
-        // nama node: nama impor
         saklar_node: SaklarNode,
         lampu_node: LampuNode,
         and_node: AndNode,
@@ -38,25 +40,11 @@
         nand_node: NandNode,
         nor_node: NorNode,
         xor_node: XorNode,
-        xnor_node: XnorNode
+        xnor_node: XnorNode,
+        teks_node: TextNode
     };
 
-    
-    const nodes = writable<Node[]>([
-    //    {
-    //     id: '1',
-    //     type: 'lampu_node',
-    //     data: {},
-    //     position: { x: -100, y: -50 }
-    //    },
-    //    {
-    //     id: '2',
-    //     type: 'saklar_node',
-    //     data: {text: "Off"},
-    //     position: { x: -400, y: -50 }
-    //    },
-    ]);
-    
+    const nodes = writable<Node[]>([]); 
     const edges = writable<Edge[]>([]);
 
     // drag and drop
@@ -101,14 +89,57 @@
         $nodes = $nodes;
     };
 
+    let menu: { id: string; top?: number; left?: number; right?: number; bottom?: number } | null;
+    let container;
+
+    onMount(() => {
+        container = document.querySelector('.svelte-flow-container');
+    });
+
+    function handleContextMenu({ detail: { event, node } }) {
+        // Prevent native context menu from showing
+        event.preventDefault();
+
+        const rect = container.getBoundingClientRect();
+
+        // Calculate position of the context menu. We want to make sure it
+        // doesn't get positioned off-screen.
+        const menuHeight = 200; // approximate height of your context menu
+        const menuWidth = 200;  // approximate width of your context menu
+
+        menu = {
+            id: node.id,
+            top: event.clientY < (rect.height - menuHeight) ? event.clientY - rect.top : undefined,
+            left: event.clientX < (rect.width - menuWidth) ? event.clientX - rect.left : undefined,
+            right: event.clientX >= (rect.width - menuWidth) ? rect.width - (event.clientX - rect.left) : undefined,
+            bottom: event.clientY >= (rect.height - menuHeight) ? rect.height - (event.clientY - rect.top) : undefined
+        };
+    }
+
+    // Close the context menu if it's open whenever the window is clicked.
+    function handlePaneClick() {
+        menu = null;
+    }
 </script>
 
-<div style="height: 98vh;">
-    <SvelteFlow {nodeTypes} {nodes} {edges} fitView on:dragover={onDragOver} on:drop={onDrop}>
+<div class="svelte-flow-container" style="height: 98vh;">
+    <SvelteFlow {nodeTypes} {nodes} {edges} fitView on:dragover={onDragOver} on:drop={onDrop}
+        on:nodecontextmenu={handleContextMenu}
+        on:paneclick={handlePaneClick}>
         <Background variant={BackgroundVariant.Lines} />
         <Background patternColor="#aaa" gap={16} />
         <Controls position="bottom-center" orientation="horizontal" />
         <MiniMap zoomable pannable height={120} />
         <DownloadButton />
+        {#if menu}
+            <ContextMenu
+                onClick={handlePaneClick}
+                id={menu.id}
+                top={menu.top}
+                left={menu.left}
+                right={menu.right}
+                bottom={menu.bottom}
+            />
+        {/if}
     </SvelteFlow>
 </div>
